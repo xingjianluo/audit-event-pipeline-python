@@ -1,0 +1,35 @@
+{
+  "data_dir": "data/audit",
+  "retention": {
+    "max_age_days": 30,
+    "max_records": 100000,
+    "segment_size": 1000
+  },
+  "dispatcher": {
+    "sink_type": "file",
+    "sink_path": "data/audit/dispatch/downstream.jsonl",
+    "max_retries": 3,
+    "base_delay_seconds": 0.05,
+    "queue_size": 1000,
+    "timeout_seconds": 2.0
+  },
+  "rules": [
+    {
+      "rule_id": "LOGIN_FAILURE_5_5M",
+      "rule_type": "failure_threshold",
+      "description": "5分钟内登录失败达到5次",
+      "severity": "warning",
+      "window_seconds": 300,
+      "threshold": 5,
+      "match_source": "login",
+      "match_result": "failure"
+    },
+    {
+      "rule_id": "SENSITIVE_OPS_APPROVAL",
+      "rule_type": "approval_required",
+      "description": "敏感操作必须附带审批号",
+      "severity": "critical",
+      "actions": ["delete_user", "wire_transfer"]
+    }
+  ]
+}
