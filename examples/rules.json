@@ -1,0 +1,30 @@
+{
+  "max_queue_size": 2000,
+  "max_retries": 3,
+  "retry_backoff_ms": 50,
+  "retention_days": 90,
+  "retention_max_records": 100000,
+  "allowed_clock_skew_seconds": 300,
+  "rules": [
+    {
+      "rule_id": "login-failure-burst",
+      "kind": "failure_threshold",
+      "description": "5 分钟内同一账号登录失败超过 5 次",
+      "match_event_types": ["login_failed"],
+      "match_sources": [],
+      "threshold": 5,
+      "window_seconds": 300,
+      "severity": "high",
+      "enabled": true
+    },
+    {
+      "rule_id": "sensitive-op-needs-approval",
+      "kind": "approval_required",
+      "description": "敏感操作必须携带审批记录",
+      "match_event_types": ["sensitive_op", "user_deleted", "permission_granted"],
+      "match_sources": [],
+      "severity": "critical",
+      "enabled": true
+    }
+  ]
+}
